@@ -1,0 +1,47 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Cliente {
+  id: ID!
+  nombre: String!
+  apellido: String!
+  email: String!
+}
+
+type Venta {
+  id: ID!
+  fecha: DateTime!
+  total: Float!
+  cliente: Cliente!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Factura {
+  id: ID!
+  numero: String!
+  fecha: DateTime!
+  monto_total: Float!
+  venta: Venta!
+}
+
+type Query {
+  clientes: [Cliente!]!
+  cliente(id: Int!): Cliente!
+  ventas: [Venta!]!
+  venta(id: Int!): Venta!
+  facturas: [Factura!]!
+  factura(id: Int!): Factura!
+}
+
+type Mutation {
+  crearCliente(nombre: String!, apellido: String!, email: String!): Cliente!
+  actualizarCliente(id: Float!, nombre: String, apellido: String, email: String): Cliente!
+  eliminarCliente(id: Float!): Boolean!
+  crearVenta(clienteId: Int!, total: Float!): Venta!
+  crearFactura(ventaId: Int!, numero: String!, monto_total: Float!): Factura!
+}
