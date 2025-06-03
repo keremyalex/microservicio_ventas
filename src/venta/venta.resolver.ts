@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Float } from '@nestjs/graphql';
 import { Venta } from './entity/venta.entity';
 import { VentaService } from './venta.service';
 
@@ -19,8 +19,9 @@ export class VentaResolver {
     @Mutation(() => Venta)
     crearVenta(
         @Args('clienteId', { type: () => Int }) clienteId: number,
-        @Args('total') total: number,
+        @Args('vendedorId', { type: () => Int }) vendedorId: number,
+        @Args('total', { type: () => Float }) total: number,
     ) {
-        return this.ventaService.create(clienteId, total);
+        return this.ventaService.create(clienteId, vendedorId, total);
     }
 }

@@ -8,7 +8,7 @@ import { Cliente } from './entity/cliente.entity';
 export class ClienteService {
     constructor(
         @InjectRepository(Cliente)
-        private clienteRepo: Repository<Cliente>,
+        private readonly clienteRepo: Repository<Cliente>,
     ) { }
 
     create(data: Partial<Cliente>) {

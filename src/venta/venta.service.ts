@@ -1,33 +1,60 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Venta } from './entity/venta.entity';
-import { Cliente } from 'src/cliente/entity/cliente.entity';
-
+import { Cliente } from '../cliente/entity/cliente.entity';
 
 @Injectable()
 export class VentaService {
     constructor(
         @InjectRepository(Venta)
-        private ventaRepo: Repository<Venta>,
+        private readonly ventaRepo: Repository<Venta>,
 
         @InjectRepository(Cliente)
-        private clienteRepo: Repository<Cliente>,
+        private readonly clienteRepo: Repository<Cliente>,
     ) { }
 
-    async create(clienteId: number, total: number) {
+    async create(clienteId: number, vendedorId: number, total: number): Promise<Venta> {
         const cliente = await this.clienteRepo.findOneBy({ id: clienteId });
-        if (!cliente) throw new Error('Cliente no encontrado');
+        if (!cliente) {
+            throw new NotFoundException(`Cliente con ID ${clienteId} no encontrado`);
+        }
 
-        const venta = this.ventaRepo.create({ cliente, total });
+        const venta = this.ventaRepo.create({ 
+            cliente, 
+            vendedor_id: vendedorId,
+            total,
+            fecha: new Date()
+        });
         return this.ventaRepo.save(venta);
     }
 
-    findAll() {
-        return this.ventaRepo.find({ relations: ['cliente'] });
+    async findAll(): Promise<Venta[]> {
+        return this.ventaRepo.find({ 
+            relations: ['cliente', 'detalles'] 
+        });
     }
 
-    findOne(id: number) {
-        return this.ventaRepo.findOne({ where: { id }, relations: ['cliente'] });
+    async findOne(id: number): Promise<Venta> {
+        const venta = await this.ventaRepo.findOne({ 
+            where: { id }, 
+            relations: ['cliente', 'detalles'] 
+        });
+        
+        if (!venta) {
+            throw new NotFoundException(`Venta con ID ${id} no encontrada`);
+        }
+        
+        return venta;
+    }
+
+    async update(id: number, updateData: Partial<Venta>): Promise<Venta> {
+        await this.ventaRepo.update(id, updateData);
+        return this.findOne(id);
+    }
+
+    async remove(id: number): Promise<boolean> {
+        const result = await this.ventaRepo.delete(id);
+        return result.affected ? result.affected > 0 : false;
     }
 }

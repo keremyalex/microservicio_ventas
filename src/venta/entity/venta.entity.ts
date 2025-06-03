@@ -1,15 +1,37 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, Int, registerEnumType, Directive } from '@nestjs/graphql';
 import {
     Entity,
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
+    OneToMany,
     JoinColumn,
 } from 'typeorm';
-import { Cliente } from 'src/cliente/entity/cliente.entity';
+import { Cliente } from '../../cliente/entity/cliente.entity';
+import { DetalleVenta } from './detalle-venta.entity';
 
+export enum EstadoVenta {
+    PENDIENTE = 'PENDIENTE',
+    COMPLETADA = 'COMPLETADA',
+    CANCELADA = 'CANCELADA'
+}
+
+export enum MetodoPago {
+    EFECTIVO = 'EFECTIVO',
+    TARJETA = 'TARJETA',
+    TRANSFERENCIA = 'TRANSFERENCIA'
+}
+
+registerEnumType(EstadoVenta, {
+    name: 'EstadoVenta',
+});
+
+registerEnumType(MetodoPago, {
+    name: 'MetodoPago',
+});
 
 @ObjectType()
+@Directive('@key(fields: "id")')
 @Entity()
 export class Venta {
     @Field(() => ID)
@@ -28,4 +50,54 @@ export class Venta {
     @JoinColumn({ name: 'cliente_id' })
     @Field(() => Cliente)
     cliente: Cliente;
+
+    @Field(() => Int)
+    @Column()
+    @Directive('@external')
+    vendedor_id: number;
+
+    @Field(() => EstadoVenta)
+    @Column({
+        type: 'enum',
+        enum: EstadoVenta,
+        default: EstadoVenta.PENDIENTE
+    })
+    estado: EstadoVenta;
+
+    @Field(() => MetodoPago)
+    @Column({
+        type: 'enum',
+        enum: MetodoPago,
+        default: MetodoPago.EFECTIVO
+    })
+    metodo_pago: MetodoPago;
+
+    @OneToMany(() => DetalleVenta, detalle => detalle.venta)
+    @Field(() => [DetalleVenta])
+    detalles: DetalleVenta[];
+
+    @Field()
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+    created_at: Date;
+
+    @Field()
+    @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
+    updated_at: Date;
+
+    @Field(() => Int, { nullable: true })
+    @Column({ nullable: true })
+    created_by: number;
+
+    @Field(() => Int, { nullable: true })
+    @Column({ nullable: true })
+    updated_by: number;
+
+    @Field(() => String, { nullable: true })
+    @Column({ nullable: true })
+    notas: string;
+
+    // Campo resuelto por el microservicio de Autenticación
+    @Field(() => String, { nullable: true })
+    @Directive('@requires(fields: "vendedor_id")')
+    vendedor?: any;
 }
