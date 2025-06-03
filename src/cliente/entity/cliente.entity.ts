@@ -1,22 +1,24 @@
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Directive } from '@nestjs/graphql';
 
 @ObjectType()
+@Directive('@key(fields: "id")')
 @Entity()
 export class Cliente {
-    @Field(() => ID)
+    @Field(() => Int)
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Field(() => String)
+    @Field()
     @Column()
     nombre: string;
 
-    @Field(() => String)
+    @Field()
     @Column()
     apellido: string;
 
-    @Field(() => String)
-    @Column({ unique: true })
+    @Field()
+    @Column()
     email: string;
 }

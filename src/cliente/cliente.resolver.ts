@@ -1,10 +1,15 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveReference } from '@nestjs/graphql';
 import { Cliente } from './entity/cliente.entity';
 import { ClienteService } from './cliente.service';
 
 @Resolver(() => Cliente)
 export class ClienteResolver {
     constructor(private readonly clienteService: ClienteService) { }
+
+    @ResolveReference()
+    resolveReference(reference: { __typename: string; id: number }) {
+        return this.clienteService.findOne(reference.id);
+    }
 
     @Query(() => [Cliente])
     clientes() {
