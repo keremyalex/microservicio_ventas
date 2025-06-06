@@ -12,23 +12,23 @@ interface VentaReference {
 export class DetalleVentaResolver {
     constructor(private readonly detalleVentaService: DetalleVentaService) {}
 
-    @Query(() => [DetalleVenta])
-    detallesVenta() {
+    @Query(() => [DetalleVenta], { name: 'detallesVenta' })
+    findAll() {
         return this.detalleVentaService.findAll();
     }
 
-    @Query(() => DetalleVenta)
-    detalleVenta(@Args('id', { type: () => Int }) id: number) {
+    @Query(() => DetalleVenta, { name: 'detalleVenta' })
+    findOne(@Args('id', { type: () => Int }) id: number) {
         return this.detalleVentaService.findOne(id);
     }
 
-    @Query(() => [DetalleVenta])
-    detallesPorVenta(@Args('ventaId', { type: () => Int }) ventaId: number) {
+    @Query(() => [DetalleVenta], { name: 'detallesPorVenta' })
+    findByVenta(@Args('ventaId', { type: () => Int }) ventaId: number) {
         return this.detalleVentaService.findByVenta(ventaId);
     }
 
     @Mutation(() => DetalleVenta)
-    async crearDetalleVenta(
+    crearDetalleVenta(
         @Args('ventaId', { type: () => Int }) ventaId: number,
         @Args('productoId', { type: () => Int }) productoId: number,
         @Args('cantidad', { type: () => Int }) cantidad: number,

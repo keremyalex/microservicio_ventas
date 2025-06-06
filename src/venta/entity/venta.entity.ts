@@ -72,7 +72,7 @@ export class Venta {
     })
     metodo_pago: MetodoPago;
 
-    @OneToMany(() => DetalleVenta, detalle => detalle.venta)
+    @OneToMany(() => DetalleVenta, detalle => detalle.venta, { eager: true })
     @Field(() => [DetalleVenta])
     detalles: DetalleVenta[];
 

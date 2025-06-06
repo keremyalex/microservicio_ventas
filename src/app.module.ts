@@ -6,14 +6,14 @@ import { ClienteModule } from './cliente/cliente.module';
 import { VentaModule } from './venta/venta.module';
 import { FacturaModule } from './factura/factura.module';
 import { ApolloFederationDriver, ApolloFederationDriverConfig } from '@nestjs/apollo';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 
 @Module({
   imports: [
     GraphQLModule.forRoot<ApolloFederationDriverConfig>({
       driver: ApolloFederationDriver,
       autoSchemaFile: {
-        federation: 2
+        federation: 2,
+        path: join(process.cwd(), 'src/schema.gql'),
       },
       playground: true,
       csrfPrevention: false,

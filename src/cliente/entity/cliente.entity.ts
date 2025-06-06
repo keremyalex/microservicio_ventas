@@ -1,6 +1,5 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, Int, Directive } from '@nestjs/graphql';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Directive } from '@nestjs/graphql';
 
 @ObjectType()
 @Directive('@key(fields: "id")')

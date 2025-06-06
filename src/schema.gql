@@ -3,23 +3,60 @@
 # ------------------------------------------------------
 
 type Cliente {
-  id: ID!
+  id: Int!
   nombre: String!
   apellido: String!
   email: String!
 }
 
-type Venta {
+type DetalleVenta {
   id: ID!
-  fecha: DateTime!
-  total: Float!
-  cliente: Cliente!
+  venta: Venta!
+  producto_id: Int!
+  cantidad: Int!
+  precio_unitario: Float!
+  subtotal: Float!
+  notas: String
+  created_at: DateTime!
+  updated_at: DateTime!
+  created_by: Int
+  updated_by: Int
+  producto: String
 }
 
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Venta {
+  id: ID!
+  fecha: DateTime!
+  total: Float!
+  cliente: Cliente!
+  vendedor_id: Int!
+  estado: EstadoVenta!
+  metodo_pago: MetodoPago!
+  detalles: [DetalleVenta!]!
+  created_at: DateTime!
+  updated_at: DateTime!
+  created_by: Int
+  updated_by: Int
+  notas: String
+  vendedor: String
+}
+
+enum EstadoVenta {
+  PENDIENTE
+  COMPLETADA
+  CANCELADA
+}
+
+enum MetodoPago {
+  EFECTIVO
+  TARJETA
+  TRANSFERENCIA
+}
 
 type Factura {
   id: ID!
@@ -34,6 +71,9 @@ type Query {
   cliente(id: Int!): Cliente!
   ventas: [Venta!]!
   venta(id: Int!): Venta!
+  detallesVenta: [DetalleVenta!]!
+  detalleVenta(id: Int!): DetalleVenta!
+  detallesPorVenta(ventaId: Int!): [DetalleVenta!]!
   facturas: [Factura!]!
   factura(id: Int!): Factura!
 }
@@ -42,6 +82,10 @@ type Mutation {
   crearCliente(nombre: String!, apellido: String!, email: String!): Cliente!
   actualizarCliente(id: Float!, nombre: String, apellido: String, email: String): Cliente!
   eliminarCliente(id: Float!): Boolean!
-  crearVenta(clienteId: Int!, total: Float!): Venta!
+  crearVenta(clienteId: Int!, vendedorId: Int!, total: Float!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
+  actualizarVenta(id: Int!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
+  crearDetalleVenta(ventaId: Int!, productoId: Int!, cantidad: Int!, precioUnitario: Float!): DetalleVenta!
+  actualizarDetalleVenta(id: Int!, cantidad: Int, precioUnitario: Float): DetalleVenta!
+  eliminarDetalleVenta(id: Int!): Boolean!
   crearFactura(ventaId: Int!, numero: String!, monto_total: Float!): Factura!
 }
