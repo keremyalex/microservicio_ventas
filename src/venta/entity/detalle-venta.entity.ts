@@ -3,6 +3,15 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 't
 import { Venta } from './venta.entity';
 
 @ObjectType()
+@Directive('@extends')
+@Directive('@key(fields: "id")')
+class Producto {
+    @Field(() => ID)
+    @Directive('@external')
+    id: number;
+}
+
+@ObjectType()
 @Directive('@key(fields: "id")')
 @Entity()
 export class DetalleVenta {
@@ -17,7 +26,6 @@ export class DetalleVenta {
 
     @Field(() => Int)
     @Column()
-    @Directive('@external')
     producto_id: number;
 
     @Field(() => Int)
@@ -52,8 +60,7 @@ export class DetalleVenta {
     @Column({ nullable: true })
     updated_by: number;
 
-    // Campo resuelto por el microservicio de Almacén
-    @Field(() => String, { nullable: true })
-    @Directive('@requires(fields: "producto_id")')
-    producto?: any;
+    @Field(() => Producto)
+    // @Directive('@requires(fields: "producto_id")')
+    producto?: Producto;
 } 

@@ -7,6 +7,26 @@ type Cliente {
   nombre: String!
   apellido: String!
   email: String!
+  ci: String!
+  telefono: String!
+  direccion: String!
+  tipo_cliente: TipoCliente!
+  fecha_registro: DateTime!
+}
+
+"""Los tipos de cliente disponibles"""
+enum TipoCliente {
+  PARTICULAR
+  EMPRESA
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Producto {
+  id: ID!
 }
 
 type DetalleVenta {
@@ -21,13 +41,12 @@ type DetalleVenta {
   updated_at: DateTime!
   created_by: Int
   updated_by: Int
-  producto: String
+  producto: Producto!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+type Vendedor {
+  id: ID!
+}
 
 type Venta {
   id: ID!
@@ -43,7 +62,7 @@ type Venta {
   created_by: Int
   updated_by: Int
   notas: String
-  vendedor: String
+  vendedor: Vendedor!
 }
 
 enum EstadoVenta {
@@ -79,8 +98,8 @@ type Query {
 }
 
 type Mutation {
-  crearCliente(nombre: String!, apellido: String!, email: String!): Cliente!
-  actualizarCliente(id: Float!, nombre: String, apellido: String, email: String): Cliente!
+  crearCliente(createClienteInput: CreateClienteInput!): Cliente!
+  actualizarCliente(updateClienteInput: UpdateClienteInput!): Cliente!
   eliminarCliente(id: Float!): Boolean!
   crearVenta(clienteId: Int!, vendedorId: Int!, total: Float!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
   actualizarVenta(id: Int!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
@@ -88,4 +107,25 @@ type Mutation {
   actualizarDetalleVenta(id: Int!, cantidad: Int, precioUnitario: Float): DetalleVenta!
   eliminarDetalleVenta(id: Int!): Boolean!
   crearFactura(ventaId: Int!, numero: String!, monto_total: Float!): Factura!
+}
+
+input CreateClienteInput {
+  nombre: String!
+  apellido: String!
+  email: String!
+  ci: String!
+  telefono: String!
+  direccion: String!
+  tipo_cliente: TipoCliente!
+}
+
+input UpdateClienteInput {
+  nombre: String
+  apellido: String
+  email: String
+  ci: String
+  telefono: String
+  direccion: String
+  tipo_cliente: TipoCliente
+  id: Int!
 }

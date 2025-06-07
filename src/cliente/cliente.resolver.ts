@@ -1,6 +1,8 @@
 import { Resolver, Query, Mutation, Args, Int, ResolveReference } from '@nestjs/graphql';
 import { Cliente } from './entity/cliente.entity';
 import { ClienteService } from './cliente.service';
+import { CreateClienteInput } from './dto/create-cliente.input';
+import { UpdateClienteInput } from './dto/update-cliente.input';
 
 @Resolver(() => Cliente)
 export class ClienteResolver {
@@ -23,26 +25,21 @@ export class ClienteResolver {
 
     @Mutation(() => Cliente)
     crearCliente(
-        @Args('nombre') nombre: string,
-        @Args('apellido') apellido: string,
-        @Args('email') email: string,
+        @Args('createClienteInput') createClienteInput: CreateClienteInput
     ) {
-        return this.clienteService.create({ nombre, apellido, email });
+        return this.clienteService.create(createClienteInput);
     }
 
     @Mutation(() => Cliente)
     async actualizarCliente(
-        @Args('id') id: number,
-        @Args('nombre', { nullable: true }) nombre: string,
-        @Args('apellido', { nullable: true }) apellido: string,
-        @Args('email', { nullable: true }) email: string,
+        @Args('updateClienteInput') updateClienteInput: UpdateClienteInput
     ): Promise<Cliente> {
-        await this.clienteService.update(id, { nombre, apellido, email });
-        const updatedCliente = await this.clienteService.findOne(id);
+        await this.clienteService.update(updateClienteInput.id, updateClienteInput);
+        const updatedCliente = await this.clienteService.findOne(updateClienteInput.id);
         if (!updatedCliente) {
             throw new Error('Cliente no encontrado');
         }
-        return updatedCliente; // retornamos el cliente actualizado
+        return updatedCliente;
     }
 
     @Mutation(() => Boolean)

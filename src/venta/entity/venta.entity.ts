@@ -10,6 +10,15 @@ import {
 import { Cliente } from '../../cliente/entity/cliente.entity';
 import { DetalleVenta } from './detalle-venta.entity';
 
+@ObjectType()
+@Directive('@extends')
+@Directive('@key(fields: "id")')
+class Vendedor {
+    @Field(() => ID)
+    @Directive('@external')
+    id: number;
+}
+
 export enum EstadoVenta {
     PENDIENTE = 'PENDIENTE',
     COMPLETADA = 'COMPLETADA',
@@ -53,7 +62,6 @@ export class Venta {
 
     @Field(() => Int)
     @Column()
-    @Directive('@external')
     vendedor_id: number;
 
     @Field(() => EstadoVenta)
@@ -96,8 +104,7 @@ export class Venta {
     @Column({ nullable: true })
     notas: string;
 
-    // Campo resuelto por el microservicio de Autenticación
-    @Field(() => String, { nullable: true })
-    @Directive('@requires(fields: "vendedor_id")')
-    vendedor?: any;
+    @Field(() => Vendedor)
+    // @Directive('@requires(fields: "vendedor_id")')
+    vendedor?: Vendedor;
 }
