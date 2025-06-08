@@ -16,7 +16,7 @@ import { DetalleVenta } from './detalle-venta.entity';
 class Vendedor {
     @Field(() => ID)
     @Directive('@external')
-    id: number;
+    id: string;
 }
 
 export enum EstadoVenta {
@@ -60,9 +60,9 @@ export class Venta {
     @Field(() => Cliente)
     cliente: Cliente;
 
-    @Field(() => Int)
+    @Field(() => String)
     @Column()
-    vendedor_id: number;
+    vendedor_id: string;
 
     @Field(() => EstadoVenta)
     @Column({
@@ -104,7 +104,6 @@ export class Venta {
     @Column({ nullable: true })
     notas: string;
 
-    @Field(() => Vendedor)
-    // @Directive('@requires(fields: "vendedor_id")')
+    @Field(() => Vendedor, { nullable: true })
     vendedor?: Vendedor;
 }

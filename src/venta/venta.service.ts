@@ -14,7 +14,7 @@ export class VentaService {
         private readonly clienteRepo: Repository<Cliente>,
     ) { }
 
-    async create(clienteId: number, vendedorId: number, total: number): Promise<Venta> {
+    async create(clienteId: number, vendedorId: string, total: number): Promise<Venta> {
         const cliente = await this.clienteRepo.findOneBy({ id: clienteId });
         if (!cliente) {
             throw new NotFoundException(`Cliente con ID ${clienteId} no encontrado`);

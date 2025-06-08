@@ -60,7 +60,7 @@ export class DetalleVenta {
     @Column({ nullable: true })
     updated_by: number;
 
-    @Field(() => Producto)
+    @Field(() => Producto, { nullable: true })
     // @Directive('@requires(fields: "producto_id")')
     producto?: Producto;
 } 

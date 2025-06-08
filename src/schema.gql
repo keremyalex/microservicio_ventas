@@ -41,7 +41,7 @@ type DetalleVenta {
   updated_at: DateTime!
   created_by: Int
   updated_by: Int
-  producto: Producto!
+  producto: Producto
 }
 
 type Vendedor {
@@ -53,7 +53,7 @@ type Venta {
   fecha: DateTime!
   total: Float!
   cliente: Cliente!
-  vendedor_id: Int!
+  vendedor_id: String!
   estado: EstadoVenta!
   metodo_pago: MetodoPago!
   detalles: [DetalleVenta!]!
@@ -62,7 +62,7 @@ type Venta {
   created_by: Int
   updated_by: Int
   notas: String
-  vendedor: Vendedor!
+  vendedor: Vendedor
 }
 
 enum EstadoVenta {
@@ -101,7 +101,7 @@ type Mutation {
   crearCliente(createClienteInput: CreateClienteInput!): Cliente!
   actualizarCliente(updateClienteInput: UpdateClienteInput!): Cliente!
   eliminarCliente(id: Float!): Boolean!
-  crearVenta(clienteId: Int!, vendedorId: Int!, total: Float!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
+  crearVenta(clienteId: Int!, vendedorId: String!, total: Float!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
   actualizarVenta(id: Int!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
   crearDetalleVenta(ventaId: Int!, productoId: Int!, cantidad: Int!, precioUnitario: Float!): DetalleVenta!
   actualizarDetalleVenta(id: Int!, cantidad: Int, precioUnitario: Float): DetalleVenta!

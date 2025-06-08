@@ -20,7 +20,7 @@ export class VentaResolver {
     @Mutation(() => Venta)
     crearVenta(
         @Args('clienteId', { type: () => Int }) clienteId: number,
-        @Args('vendedorId', { type: () => Int }) vendedorId: number,
+        @Args('vendedorId', { type: () => String }) vendedorId: string,
         @Args('total', { type: () => Float }) total: number,
         @Args('estado', { type: () => EstadoVenta, nullable: true }) estado?: EstadoVenta,
         @Args('metodoPago', { type: () => MetodoPago, nullable: true }) metodoPago?: MetodoPago,
