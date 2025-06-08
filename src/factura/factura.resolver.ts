@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Float } from '@nestjs/graphql';
 import { Factura } from './entity/factura.entity';
 import { FacturaService } from './factura.service';
 
@@ -19,9 +19,8 @@ export class FacturaResolver {
     @Mutation(() => Factura)
     crearFactura(
         @Args('ventaId', { type: () => Int }) ventaId: number,
-        @Args('numero') numero: string,
-        @Args('monto_total') monto_total: number,
+        @Args('monto_total', { type: () => Float }) monto_total: number,
     ) {
-        return this.facturaService.create(ventaId, numero, monto_total);
+        return this.facturaService.create(ventaId, monto_total);
     }
 }

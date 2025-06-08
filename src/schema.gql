@@ -101,12 +101,12 @@ type Mutation {
   crearCliente(createClienteInput: CreateClienteInput!): Cliente!
   actualizarCliente(updateClienteInput: UpdateClienteInput!): Cliente!
   eliminarCliente(id: Float!): Boolean!
-  crearVenta(clienteId: Int!, vendedorId: String!, total: Float!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
+  crearVenta(clienteId: Int!, vendedorId: String!, total: Float!, metodoPago: MetodoPago!, estado: EstadoVenta): Venta!
   actualizarVenta(id: Int!, estado: EstadoVenta, metodoPago: MetodoPago): Venta!
   crearDetalleVenta(ventaId: Int!, productoId: Int!, cantidad: Int!, precioUnitario: Float!): DetalleVenta!
   actualizarDetalleVenta(id: Int!, cantidad: Int, precioUnitario: Float): DetalleVenta!
   eliminarDetalleVenta(id: Int!): Boolean!
-  crearFactura(ventaId: Int!, numero: String!, monto_total: Float!): Factura!
+  crearFactura(ventaId: Int!, monto_total: Float!): Factura!
 }
 
 input CreateClienteInput {

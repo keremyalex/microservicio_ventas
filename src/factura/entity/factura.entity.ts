@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { Venta } from 'src/venta/entity/venta.entity';
 
-
 @ObjectType()
 @Entity()
 export class Factura {
@@ -17,8 +16,11 @@ export class Factura {
     id: number;
 
     @Field()
-    @Column()
+    @Column({ unique: true })
     numero: string;
+
+    @Column({ type: 'int', default: 0 })
+    secuencial: number;
 
     @Field()
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

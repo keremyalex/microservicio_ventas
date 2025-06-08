@@ -22,10 +22,10 @@ export class VentaResolver {
         @Args('clienteId', { type: () => Int }) clienteId: number,
         @Args('vendedorId', { type: () => String }) vendedorId: string,
         @Args('total', { type: () => Float }) total: number,
+        @Args('metodoPago', { type: () => MetodoPago }) metodoPago: MetodoPago,
         @Args('estado', { type: () => EstadoVenta, nullable: true }) estado?: EstadoVenta,
-        @Args('metodoPago', { type: () => MetodoPago, nullable: true }) metodoPago?: MetodoPago,
     ) {
-        return this.ventaService.create(clienteId, vendedorId, total);
+        return this.ventaService.create(clienteId, vendedorId, total, estado, metodoPago);
     }
 
     @Mutation(() => Venta)

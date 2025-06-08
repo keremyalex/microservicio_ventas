@@ -75,8 +75,7 @@ export class Venta {
     @Field(() => MetodoPago)
     @Column({
         type: 'enum',
-        enum: MetodoPago,
-        default: MetodoPago.EFECTIVO
+        enum: MetodoPago
     })
     metodo_pago: MetodoPago;
 

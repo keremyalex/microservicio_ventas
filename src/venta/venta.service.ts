@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Venta } from './entity/venta.entity';
 import { Cliente } from '../cliente/entity/cliente.entity';
+import { EstadoVenta, MetodoPago } from './entity/venta.entity';
 
 @Injectable()
 export class VentaService {
@@ -14,7 +15,7 @@ export class VentaService {
         private readonly clienteRepo: Repository<Cliente>,
     ) { }
 
-    async create(clienteId: number, vendedorId: string, total: number): Promise<Venta> {
+    async create(clienteId: number, vendedorId: string, total: number, estado: EstadoVenta = EstadoVenta.PENDIENTE, metodoPago: MetodoPago): Promise<Venta> {
         const cliente = await this.clienteRepo.findOneBy({ id: clienteId });
         if (!cliente) {
             throw new NotFoundException(`Cliente con ID ${clienteId} no encontrado`);
@@ -24,6 +25,8 @@ export class VentaService {
             cliente, 
             vendedor_id: vendedorId,
             total,
+            estado,
+            metodo_pago: metodoPago,
             fecha: new Date()
         });
         return this.ventaRepo.save(venta);
