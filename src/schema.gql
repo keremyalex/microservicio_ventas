@@ -77,6 +77,14 @@ enum MetodoPago {
   TRANSFERENCIA
 }
 
+type ProductoMasVendido {
+  producto_id: ID!
+  nombre_producto: String
+  cantidad_total: Int!
+  monto_total: Float!
+  numero_ventas: Int!
+}
+
 type Factura {
   id: ID!
   numero: String!
@@ -90,11 +98,28 @@ type Query {
   cliente(id: Int!): Cliente!
   ventas: [Venta!]!
   venta(id: Int!): Venta!
+  productosMasVendidos(filtro: FiltroFechaInput!, limite: Int = 5): [ProductoMasVendido!]!
   detallesVenta: [DetalleVenta!]!
   detalleVenta(id: Int!): DetalleVenta!
   detallesPorVenta(ventaId: Int!): [DetalleVenta!]!
   facturas: [Factura!]!
   factura(id: Int!): Factura!
+}
+
+input FiltroFechaInput {
+  tipo: TipoFiltroFecha!
+  fecha_inicio: String
+  fecha_fin: String
+}
+
+"""Tipos de filtro de fecha disponibles para productos más vendidos"""
+enum TipoFiltroFecha {
+  HOY
+  ULTIMOS_7_DIAS
+  ULTIMOS_30_DIAS
+  ESTE_MES
+  ESTE_ANIO
+  RANGO
 }
 
 type Mutation {

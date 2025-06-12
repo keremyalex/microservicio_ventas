@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent, Float } fro
 import { Venta, EstadoVenta, MetodoPago } from './entity/venta.entity';
 import { VentaService } from './venta.service';
 import { DetalleVenta } from './entity/detalle-venta.entity';
+import { ProductoMasVendido, FiltroFechaInput } from './dto/producto-mas-vendido.dto';
 
 @Resolver(() => Venta)
 export class VentaResolver {
@@ -40,5 +41,13 @@ export class VentaResolver {
     @ResolveField(() => [DetalleVenta])
     async detalles(@Parent() venta: Venta) {
         return venta.detalles;
+    }
+
+    @Query(() => [ProductoMasVendido])
+    async productosMasVendidos(
+        @Args('filtro', { type: () => FiltroFechaInput }) filtro: FiltroFechaInput,
+        @Args('limite', { type: () => Int, nullable: true, defaultValue: 5 }) limite?: number
+    ) {
+        return this.ventaService.getProductosMasVendidos(filtro, limite);
     }
 }
