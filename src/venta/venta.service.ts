@@ -143,7 +143,8 @@ export class VentaService {
                 };
 
                 existente.cantidad_total += detalle.cantidad;
-                existente.monto_total += detalle.subtotal;
+                // Asegurarnos de que los valores sean números
+                existente.monto_total = Number(existente.monto_total) + Number(detalle.subtotal);
                 existente.numero_ventas += 1;
 
                 productosMap.set(productoId, existente);
@@ -155,6 +156,10 @@ export class VentaService {
             .sort((a, b) => b.cantidad_total - a.cantidad_total)
             .slice(0, limite);
 
-        return productos;
+        // Asegurarnos de que los montos sean números válidos
+        return productos.map(producto => ({
+            ...producto,
+            monto_total: Number(producto.monto_total.toFixed(2))
+        }));
     }
 }
